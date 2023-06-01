@@ -2,4 +2,6 @@
 
 def squared(x):
     return x * x
+
+def addit (x):
     

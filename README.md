@@ -28,26 +28,36 @@ Pre-processing thus far has centered around data exploration. Some things that h
 # Libraries Used
 
 **Pandas**
+
 Pandas was used primarily to begin pre-processing and exploring the data.
 May access the most recent version to download below.
+
 [Download available here](https://packaging.python.org/en/latest/tutorials/installing-packages/)
 
 **Matplotlib**
+
 Matplotlib was used to create some visaulizations in the pre-processing phase and in the analysis phase.
 May access the most recent version to download below.
+
 [Download available here](https://matplotlib.org/stable/users/installing/index.html)
 
 **Seaborn**
+
 Seaborn was used to create visualizations during the data exploration phase.
 May access the most recent version to download below.
+
 [Download available here](https://seaborn.pydata.org/installing.html)
 
 **Numpy**
+
 Numpy was used for its efficient numerical calculations in Python
 May access the most recent version to download below.
+
 [Download available here](https://numpy.org/install/)
 
 **Scikit-learn**
+
 Scikit-learn was used for pre-processing and future ML work.
 May access the most recent version to download below.
+
 [Download available here](https://scikit-learn.org/stable/install.html)

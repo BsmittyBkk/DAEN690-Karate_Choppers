@@ -450,6 +450,58 @@ RCdata_concat.std()
 
 
 # In[ ]:
+#PCA analysis
+#https://www.edureka.co/blog/principal-component-analysis/
+#Step 1 - import required packages
+import sklearn
+from sklearn.preprocessing import StandardScaler
+from matplotlib import rcParams
+from sklearn.decomposition import PCA
+from sklearn import decomposition
+from sklearn.preprocessing import scale
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+from matplotlib.cm import register_cmap
+from scipy import stats
+from sklearn.decomposition import PCA as sklearnPCA
+import seaborn
+%matplotlib inline
+#Step 2- Select df. 
+#Step3 - formatting the data.
+# Step 4: Standardization. It run using dfn, now I am testing with dfCOl_pca
+X_std = StandardScaler().fit_transform(df_coldrop)
+#X_std
+#Step 5: Compute covariance matrix
+mean_vec = np.mean(X_std, axis=0)
+cov_mat = (X_std - mean_vec).T.dot((X_std - mean_vec)) / (X_std.shape[0]-1)
+print('Covariance matrix n%s' %cov_mat)
+#Step 6: Calculate eigenvectors and eigenvalues
+#Calculating eigenvectors and eigenvalues on covariance matrix
+cov_mat = np.cov(X_std.T)
+eig_vals, eig_vecs = np.linalg.eig(cov_mat)
+print('Eigenvectors n%s' %eig_vecs)
+print('nEigenvalues n%s' %eig_vals)
+#Step 7: Compute the feature vector.  rearrange the eigenvalues in descending order. 
+#This represents the significance of the principal components in descending order:
+# Visually confirm that the list is correctly sorted by decreasing eigenvalues
+eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
+print('Eigenvalues in descending order:')
+for i in eig_pairs:
+    print(i[0])
+#Step 8: Use the PCA() function to reduce the dimensionality of the data set
+pca = PCA()
+pca.fit_transform(dfCol_pca)
+print(pca.explained_variance_ratio_)
+#Step 9:Projecting the variance to the Principle Components
+pca = PCA().fit(X_std)
+plt.plot(np.cumsum(pca.explained_variance_ratio_))
+plt.xlabel('number of components')
+plt.ylabel('cumulative explained variance')
+plt.show()
+#According to the graph above, we can use 40 components to get like 90% of the data. 
+
 
 
 

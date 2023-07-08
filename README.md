@@ -1,6 +1,12 @@
 # DAEN690-Karate_Choppers
 DAEN Summer Capstone Project focusing on   IDENTIFICATION, CHARACTERIZATION, AND ANALYSIS OF ROTORCRAFT FLIGHT MANEUVERS USING SIMULATED FLIGHT DATA
 
+# Setting up dataframe for model development
+- Change the path in combine_dataset.py and modeling_template.py to match the path to the CSV files with the data we want to use. DO NOT INCLUDE CSV FILES THAT ARE NOT IN THE MODELING SCOPE.
+- Run the combine_dataset.py, this may take a few moments to complete.
+- You should now have a pickle file in the directory with your data named working_df.pkl. This will allow for everyone to be using the same data for modeling.
+- Uncomment the line of code below the desired dataset you want to model on (Dynamic Rollover or LOW-G) at the bottom of modeling_template.py and create your model in that document, but rename the document as modeling_{your_model_type_here}.py e.g. modeling_KNN.py.
+
 # Objectives
 The goal of this project is to conduct reasearch, create a report, and create machine learning models to accurately and efficiently detect and classify a subset of maneuvers in rotocraft. The data used in this project is in-flight simulated data from a rotorcraft flight simulator using a AW-139 model. The selected subset of manuevers for this project are dynamic rollovers, retreating blade stalls, and low-g scenarios.
 

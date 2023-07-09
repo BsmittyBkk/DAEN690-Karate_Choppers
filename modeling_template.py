@@ -11,7 +11,7 @@ def test_dataframe_shape():
     with open(f'{path}/working_df.pkl', 'rb') as file:
         df = pickle.load(file)
     # Perform the shape validation
-    assert df.shape == (575920, 118)
+    assert df.shape == (487470, 118)
     return df
 
 # working dataframe that has 'Label', 'Dynamic Rollover', 'LOW-G' as the final 3 columns

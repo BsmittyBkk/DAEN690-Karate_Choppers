@@ -1,11 +1,13 @@
 import pickle
 import os
+import re
 import glob
 import pandas as pd
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
 path = r'../CSV'
+pattern = r'.*2023\.06\.15.*\.csv$'
 
 # this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in
 with open('./src/use_cols.pkl', 'rb') as f:
@@ -31,8 +33,8 @@ label_table['EndTime'] = pd.to_datetime(
 
 def combine_csv_files(csv_directory, columns_to_use, label_df):
     # get list of CSV file paths in the directory
-    csv_files = glob.glob(csv_directory + '/*.csv')
-
+    csv_files = [os.path.join(csv_directory, filename) for filename in os.listdir(
+        csv_directory) if re.match(pattern, filename)]
     # create an empty dataframe to store the combined data
     combined_df = pd.DataFrame()
 

@@ -1,5 +1,4 @@
 import pickle
-import pytest
 import pandas as pd
 
 # this is the path to your pickle file (should be the same location as CSVs)

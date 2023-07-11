@@ -7,10 +7,10 @@ path = r'../CSV'
 # the below function verifies that the dataframe you are working with is the same shape as the anticipated dataframe
 def test_dataframe_shape():
     # load the dataframe to be tested
-    with open(f'{path}/working_df.pkl', 'rb') as file:
+    with open(f'{path}/working_df1.pkl', 'rb') as file:
         df = pickle.load(file)
     # Perform the shape validation
-    assert df.shape == (487470, 118)
+    assert df.shape == (258905, 118)
     return df
 
 # working dataframe that has 'Label', 'Dynamic Rollover', 'LOW-G' as the final 3 columns

@@ -70,6 +70,16 @@ def combine_csv_files(csv_directory, columns_to_use, label_df):
     dummies_df = pd.get_dummies(combined_df['Label'], dummy_na=False)
     dummies_df = dummies_df.astype(int)
     combined_df = pd.concat([combined_df, dummies_df], axis=1)
+    # Convert the time column to pandas datetime format if it's not already in that format
+    combined_df['System UTC Time'] = pd.to_datetime(combined_df['System UTC Time'], format='%H:%M:%S.%f')
+
+    # Set the start and end time range
+    start_time = pd.to_datetime('11:56:25.0', format='%H:%M:%S.%f')
+    end_time = pd.to_datetime('16:38:26.0', format='%H:%M:%S.%f')
+
+    # Filter the DataFrame to include rows between the start and end times
+    combined_df = combined_df[(combined_df['System UTC Time'] >= start_time) & (combined_df['System UTC Time'] <= end_time)].copy()
+
     combined_df.drop(['Elapsed Time', 'Date', 'System UTC Time'], inplace=True, axis=1)
     
     return combined_df
@@ -80,5 +90,5 @@ df = combine_csv_files(path, use_cols, label_table)
 df['Altitude(MSL)'] = df['Altitude(MSL)'].astype('float')
 # this will create a pickle file with the working dataframe in your directory with the original CSV files
 # you will not need to run this script again, as we will load in the dataframe from the pickle file
-with open(f'{path}/working_df.pkl', 'wb') as f:
+with open(f'{path}/working_df1.pkl', 'wb') as f:
     pickle.dump(df, f)

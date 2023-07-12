@@ -1,11 +1,13 @@
 import pickle
 import os
+import re
 import glob
 import pandas as pd
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
-path = r'C:\DAEN690\Data'
+path = r'../CSV'
+pattern = r'.*2023\.06\.15.*\.csv$'
 
 # this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in
 with open('./src/use_cols.pkl', 'rb') as f:
@@ -31,8 +33,8 @@ label_table['EndTime'] = pd.to_datetime(
 
 def combine_csv_files(csv_directory, columns_to_use, label_df):
     # get list of CSV file paths in the directory
-    csv_files = glob.glob(csv_directory + '/*.csv')
-
+    csv_files = [os.path.join(csv_directory, filename) for filename in os.listdir(
+        csv_directory) if re.match(pattern, filename)]
     # create an empty dataframe to store the combined data
     combined_df = pd.DataFrame()
 
@@ -68,6 +70,16 @@ def combine_csv_files(csv_directory, columns_to_use, label_df):
     dummies_df = pd.get_dummies(combined_df['Label'], dummy_na=False)
     dummies_df = dummies_df.astype(int)
     combined_df = pd.concat([combined_df, dummies_df], axis=1)
+    # Convert the time column to pandas datetime format if it's not already in that format
+    combined_df['System UTC Time'] = pd.to_datetime(combined_df['System UTC Time'], format='%H:%M:%S.%f')
+
+    # Set the start and end time range
+    start_time = pd.to_datetime('11:56:25.0', format='%H:%M:%S.%f')
+    end_time = pd.to_datetime('16:38:26.0', format='%H:%M:%S.%f')
+
+    # Filter the DataFrame to include rows between the start and end times
+    combined_df = combined_df[(combined_df['System UTC Time'] >= start_time) & (combined_df['System UTC Time'] <= end_time)].copy()
+
     combined_df.drop(['Elapsed Time', 'Date', 'System UTC Time'], inplace=True, axis=1)
     
     return combined_df
@@ -78,5 +90,5 @@ df = combine_csv_files(path, use_cols, label_table)
 df['Altitude(MSL)'] = df['Altitude(MSL)'].astype('float')
 # this will create a pickle file with the working dataframe in your directory with the original CSV files
 # you will not need to run this script again, as we will load in the dataframe from the pickle file
-with open(f'{path}/working_df.pkl', 'wb') as f:
+with open(f'{path}/working_df1.pkl', 'wb') as f:
     pickle.dump(df, f)

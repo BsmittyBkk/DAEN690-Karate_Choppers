@@ -6,7 +6,7 @@ import pandas as pd
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
-path = r'../CSV'
+path = r'C:\RotorCraftData\CSV'
 pattern = r'.*2023\.06\.15.*\.csv$'
 
 # this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in

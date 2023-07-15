@@ -39,6 +39,7 @@ venv
 .ropeproject/
 .vscode/
 result.xml
+.ipynb_checkpoints
 
 # Pylint dirs/files
 .pylint.d/

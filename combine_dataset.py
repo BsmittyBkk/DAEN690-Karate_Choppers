@@ -6,7 +6,7 @@ import pandas as pd
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
-path = r'C:\RotorCraftData\CSV'
+path = r'../CSV'
 pattern = r'.*2023\.06\.15.*\.csv$'
 
 # this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in
@@ -86,9 +86,7 @@ def combine_csv_files(csv_directory, columns_to_use, label_df):
 
 # this calls the function from above that cleans and creates dummy variables for our target variables
 df = combine_csv_files(path, use_cols, label_table)
-# dataframe is created with one column having the incorrect type
-df['Altitude(MSL)'] = df['Altitude(MSL)'].astype('float')
 # this will create a pickle file with the working dataframe in your directory with the original CSV files
 # you will not need to run this script again, as we will load in the dataframe from the pickle file
-with open(f'{path}/working_df1.pkl', 'wb') as f:
+with open(f'{path}/working_df2.pkl', 'wb') as f:
     pickle.dump(df, f)

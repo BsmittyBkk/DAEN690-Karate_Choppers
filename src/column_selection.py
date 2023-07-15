@@ -58,34 +58,28 @@ print(f"Columns with almost zero variance, includes those with only one value: \
 # 'Transmission Chip Warning', 'Transmission Oil Temp Warning', 'Transmission Oil Pressure Warning']
 df1.drop(columns=near_zero_variance_columns, inplace=True)
 
+correlation_matrix = df1.iloc[:, 2:].corr()
+
+# Identify correlated columns
+corr_threshold = .9
+correlated_columns = []
+for col1 in correlation_matrix.columns:
+    for col2 in correlation_matrix.columns:
+        if col1 != col2 and np.abs(correlation_matrix.loc[col1, col2]) > corr_threshold:
+            correlated_columns.append(col1)
+
+correlated_columns.append('VHF Com1 Freq')
+# Drop correlated columns from the dataframe
+df1.drop(correlated_columns, axis=1, inplace=True)
+
 print(f"Final shape of the DataFrame: {df1.shape}")
 # Final shape of the DataFrame: (27572, 118)
 
 use_cols = ['Elapsed Time']
 use_cols.extend(df1.columns.tolist())
 print(f"Final column list with low variance columns removed: \n{use_cols}")
-# Final column list with low variance columns removed:
-# ['Elapsed_Time', 'Date', 'System UTC Time', 'Altitude(MSL)', 'Altitude(AGL)', 'Heading(mag)', 'Heading(true)', 'Pitch', 'Roll', 
-# 'Yaw', 'Alpha', 'Beta', 'Groundspeed', 'Airspeed(Ind)', 'Airspeed(True)', 'Vert. Speed', 'Baro Altitude Pilot', 
-# 'Baro Altitude Copilot', 'Radio Altitude Pilot', 'Radio Altitude Copilot', 'Wheels On Ground-[0]', 'Wheels On Ground-[1]', 
-# 'Wheels On Ground-[2]', 'Compass Heading', 'Ground Track Pilot', 'Ground Track Copilot', 'Roll Rate', 'Pitch Rate', 
-# 'Yaw Rate', 'Turn Rate', 'Sideslip Angle', 'Angle of Attack', 'Pitch Path', 'Heading Path', 'Flight Path Angle - VV-[0]', 
-# 'Ground Track - VV-[0]', 'Roll Acceleration', 'Pitch Acceleration', 'Yaw Acceleration', 'Cyclic Pitch Pos-[0]', 
-# 'Cyclic Roll Pos-[0]', 'Collective Pos-[0]', 'Pedal Pos', 'Throttle Position', 'Fuel Weight', 'Gross Weight', 
-# 'Oil Pressure-[0]', 'Oil Pressure-[1]', 'Engine Temp-[0]', 'Engine Temp-[1]', 'Engine Torque (N1)', 'Engine Torque (N2)', 
-# 'Engine speeds (N1)-[0]', 'Engine speeds (N1)-[1]', 'Engine speeds (N2)-[0]', 'Engine speeds (N2)-[1]', 
-# 'Engine speeds (NG2)', 'Engine speeds (NG1)', 'Engine speeds (NP2)-[0]', 'Engine speeds (NP2)-[1]', 'Engine speeds (NP1)-[0]', 
-# 'Engine speeds (NP1)-[1]', 'Rotor RPM-[0]', 'Rotor RPM Value-[0]','Rotor RPM Value-[1]', 'Rotor Torque-[0]', 
-# 'Engine Power-[0]', 'Engine Power-[1]', 'T5 Temp ITT-[0]', 'T5 Temp ITT-[1]', 'Lateral Cyclic Eng Rotor-Disc-[0]', 
-# 'Longitudinal Cyclic Eng Rotor-Disc-[0]', 'Lateral Disc Tilt Cyclic Deflection-[0]', 'Longitudinal Disc Tilt Cyclic Deflection-[0]', 
-# 'Induced Velo Behind Disc-[0]', 'Induced Velo Behind Disc-[1]', 'Total Engine Thrust-[0]', 'Total Engine Thrust-[1]', 'Main Rotor Pos', 
-# 'Main Rotor Angle Slow', 'Swashplate Rotor 000', 'Swashplate Rotor 072', 'Swashplate Rotor 144', 'Swashplate Rotor 216', 
-# 'Swashplate Rotor 288', 'Swashplate Phase', 'FD pitch', 'FD roll', 'NAV Status', 'STBY Status', 'CPL Status',
-# 'GPS 1 DME Distance', 'GPS 1 DME Speed', 'NAV 1 DME Time', 'NAV 1 DME Distance', 'NAV 1 DME Speed', 'NAV 2 NAV ID', 'HSI Source Selection', 
-# 'Nav1 Hor Deviation', 'GPS Hor Deviation', 'GPS Ver Deviation', 'VHF Com1 Freq', 'VHF Com2 Freq', 'VHF Nav1 Freq', 'VHF Nav2 Freq', 
-# 'Cyclic Cargo', 'Outside Air Temp', 'Wind Speed(True)', 'Wind Direction(Mag)', 'Elevation', 'Cloud Coverage 0', 
-# 'Cloud Coverage 2', 'Cloud Base MSL 0', 'Cloud Base MSL 1', 'Cloud Base MSL 2', 'Cloud Tops MSL 0', 'Cloud Tops MSL 1', 'Cloud Tops MSL 2']
-
+# Final column list with low variance and high correlation columns removed:
+# ['Elapsed Time', 'Date', 'System UTC Time', 'Heading(mag)', 'Vert. Speed', 'Compass Heading', 'Roll Rate', 'Pitch Rate', 'Pitch Path', 'Heading Path', 'Flight Path Angle - VV-[0]', 'Ground Track - VV-[0]', 'Roll Acceleration', 'Pitch Acceleration', 'Yaw Acceleration', 'Pedal Pos', 'Induced Velo Behind Disc-[0]', 'Induced Velo Behind Disc-[1]', 'Main Rotor Pos', 'Main Rotor Angle Slow', 'Swashplate Rotor 000', 'Swashplate Rotor 072', 'Swashplate Rotor 144', 'Swashplate Rotor 216', 'Swashplate Rotor 288', 'Swashplate Phase', 'GPS 1 DME Distance', 'GPS 1 DME Speed', 'NAV 1 DME Time', 'NAV 1 DME Speed', 'NAV 2 NAV ID', 'GPS Hor Deviation']
 
 with open('./use_cols.pkl', 'wb') as f:
     pickle.dump(use_cols, f)

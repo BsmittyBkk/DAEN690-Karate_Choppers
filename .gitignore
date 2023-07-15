@@ -20,7 +20,7 @@ Thumbs.db
 desktop.ini
 */.DS_Store/
 spyder_crash.log
-*.DS_Store
+*/.DS_Store
 .spyproject/*
 .idea/
 .cache

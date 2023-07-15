@@ -27,6 +27,7 @@ spyder_crash.log
 .coverage*
 MANIFEST
 .boot_branch.txt
+venv
 
 # git .orig files
 *.orig

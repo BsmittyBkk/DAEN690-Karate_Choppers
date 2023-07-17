@@ -848,15 +848,16 @@ score = mean(scores)
 print('F1 Score: %.3f' % score)
 
 
-# In[77]:
+# In[76]:
 
 
 #from modeling_template.py import return_df
 
 
-# # Decision tree
+# # Decision tree train/test split 
+# https://www.datacamp.com/tutorial/decision-tree-classification-python
 
-# In[78]:
+# In[77]:
 
 
 # Load libraries
@@ -866,7 +867,7 @@ from sklearn.model_selection import train_test_split # Import train_test_split f
 from sklearn import metrics #Import scikit-learn metrics module for accuracy calculation
 
 
-# In[81]:
+# In[78]:
 
 
 #make a train/test split and scale the predictors with the StandardScaler class: Using df
@@ -878,28 +879,114 @@ z1 = pd.DataFrame(df,columns=['LOW-G'])
 X1_train, X1_test, y1_train, y1_test,z1_train,z1_test = train_test_split(X1, y1,z1, test_size=0.3, random_state= 10)
 
 
-# In[80]:
+# # Building Decision Tree Model
+
+# In[88]:
 
 
-#Building Decision Tree Model
 # Create Decision Tree classifer object
-RCclf = DecisionTreeClassifier()
+RCclf_DR = DecisionTreeClassifier()
 
 # Train Decision Tree Classifer
-RCclf = RCclf.fit(X1_train,y1_train)
+RCclf_DR = RCclf_DR.fit(X1_train, y1_train)
 
 #Predict the response for test dataset
-y_pred = RCclf.predict(X1_test)
+y_pred = RCclf_DR.predict(X1_test)
 
-#Evaluating the Model
-# Model Accuracy, how often is the classifier correct?
-print("Accuracy:",metrics.accuracy_score(y1_test, y_pred))
-
-
-# In[ ]:
+# Predict the probability of each class
+y_predProba = RCclf_DR.predict_proba
 
 
-df.shape
+# # Optimizing Decision Tree
+
+# In[81]:
+
+
+# Create Decision Tree classifer object. Dynamic Rollover
+RCclf_DR = DecisionTreeClassifier(criterion= "entropy", max_depth=3)
+
+# Train Decision Tree Classifer
+RCclf_DR = RCclf_DR.fit(X1_train, y1_train)
+
+#Predict the response for test dataset
+y_pred = RCclf_DR.predict(X1_test)
+
+#y_pred predits Dynamic rollover
+
+
+# In[99]:
+
+
+
+
+
+# In[98]:
+
+
+
+
+
+# In[120]:
+
+
+# # Create Decision Tree classifer object. LOW-G
+RCclf_LowG = DecisionTreeClassifier(criterion="entropy", max_depth=3)
+
+# Train Decision Tree Classifer
+RCclf_LowG = RCclf_LowG.fit(X1_train, z1_train)
+
+#Predict the response for test dataset
+z_pred = RCclf_LowG.predict(X1_test)
+
+
+# In[96]:
+
+
+
+
+
+# In[97]:
+
+
+
+
+
+# # Evaluating the Model
+
+# In[122]:
+
+
+# imports for classifiers and metrics
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import f1_score
+
+
+# In[143]:
+
+
+# F1 score
+# FORMULA- F1 = 2 * (precision * recall) / (precision + recall)
+#'macro':Calculate metrics for each label, and find their unweighted mean. This does not take label imbalance into account.
+score_DR_Macro = f1_score(y_pred, y1_test, average='macro')
+print(score_DR_Macro)
+#'micro':Calculate metrics globally by counting the total true positives, false negatives and false positives.
+score_DR_Micro = f1_score(y_pred, y1_test, average='micro')
+print(score_DR_Micro)
+# 'weighted':Calculate metrics for each label, and find their average weighted by support (the number of true instances for each label). This alters ‘macro’ to account for label imbalance; it can result in an F-score that is not between precision and recall.
+score_DR_W = f1_score(y_pred, y1_test, average='weighted')
+print(score_DR_W)
+
+
+# In[144]:
+
+
+#Low-G F1 score
+score_LowG = f1_score(z_pred, z1_test,  average='macro')
+print(score_LowG)
+score_LowG_Micro = f1_score(y_pred, y1_test, average='micro')
+print(score_LowG_Micro)
+score_LowG_W = f1_score(y_pred, y1_test, average='weighted')
+print(score_LowG_W)
 
 
 # # Visualizing Decision Trees
@@ -909,18 +996,62 @@ df.shape
 
 import sklearn
 from sklearn.tree import export_graphviz
+import graphviz
+from sklearn import tree
 
 
 # In[ ]:
 
 
-# in progess
+#Plot Dynamic Rollover tree
+tree.plot_tree(RCclf_DR)
 
 
-# In[ ]:
+# In[101]:
 
 
+# plot LowG tree using the plot_tree function
+tree.plot_tree(RCclf_LowG)
 
+
+# In[104]:
+
+
+# Visualization of Dynamic Rollover
+dot_data = tree.export_graphviz(RCclf_DR, out_file=None) 
+DRgraph = graphviz.Source(dot_data) 
+DRgraph.render("DRGraph") 
+
+
+# In[117]:
+
+
+dot_data = tree.export_graphviz (RCclf_DR, out_file = None,
+              filled=True, 
+        rounded = True,
+        special_characters=True)
+DRgraph=graphviz.Source(dot_data)  
+DRgraph
+
+
+# In[118]:
+
+
+# Visualization of LOW-G
+dot_LGdata = tree.export_graphviz(RCclf_LowG, out_file=None) 
+LowGgraph = graphviz.Source(dot_LGdata) 
+LowGgraph.render("LowG-Graph")
+
+
+# In[119]:
+
+
+dot_LGdata = tree.export_graphviz (RCclf_LowG, out_file = None,
+              filled=True, 
+        rounded = True,
+        special_characters=True)
+LowGgraph=graphviz.Source(dot_LGdata)  
+LowGgraph
 
 
 # In[ ]:

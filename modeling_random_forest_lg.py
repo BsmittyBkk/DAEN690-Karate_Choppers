@@ -12,7 +12,7 @@ path = r'../CSV'
 # the below function verifies that the dataframe you are working with is the same shape as the anticipated dataframe
 def test_dataframe_shape():
     # load the dataframe to be tested
-    with open(f'{path}/working_df2.pkl', 'rb') as file:
+    with open(f'{path}/working_df_aws.pkl', 'rb') as file:
         df = pickle.load(file)
     # Perform the shape validation
     # assert df.shape == (258905, 118)
@@ -22,7 +22,7 @@ def test_dataframe_shape():
 df = test_dataframe_shape().reset_index(drop=True)
 
 ## to test on Low-G
-df = df.drop(columns=['Label', 'Dynamic Rollover', 'Main Rotor Angle Slow', 'Swashplate Rotor 072', 'Swashplate Rotor 288'])
+df = df.drop(columns=['Dynamic Rollover', 'NAV 2 DME Time', 'GPS 1 DME Time', 'NAV 2 NAV ID', 'GPS 1 NAV ID', 'FMS Waypoints'])
 # Main Rotor Angle Slow: 0.0
 # Swashplate Rotor 072: 0.0
 # Swashplate Rotor 288: 0.0
@@ -34,13 +34,13 @@ y = df['LOW-G']
 # create training set and testing set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
-# parameter grid
+
 params = {
     'rf__n_estimators': [50],  # 100, 200
     'rf__max_depth': [None],  # 5, 10
     'rf__min_samples_split': [2],  # 5, 10
     'rf__min_samples_leaf': [1],  # 2, 4
-    'rf__max_features': ['sqrt'],  # 'log2'
+    'rf__max_features': ['log2'],  # 'sqrt'
     'rf__bootstrap': [True],  # False
     'rf__class_weight': ['balanced'],
     'rf__random_state': [42],
@@ -97,29 +97,24 @@ print("Most important variables:")
 for i in sorted_indices:
     print(f"{feature_names[i]}: {importances[i]}")
 # Most important variables:
-# Pitch Path: 0.182232561159997
-# GPS 1 DME Speed: 0.1583920938049593
-# NAV 1 DME Time: 0.1337096310497321
-# NAV 1 DME Speed: 0.08218891633505629
-# Ground Track - VV-[0]: 0.07649893204183678
-# Vert. Speed: 0.07531295161043715
-# Pedal Pos: 0.07077139101877601
-# Heading(mag): 0.07058102562528272
-# Induced Velo Behind Disc-[0]: 0.03502328369058118
-# Yaw Acceleration: 0.03391873602206241
-# Pitch Rate: 0.026999031988835458
-# Swashplate Rotor 000: 0.01378417768732544
-# Compass Heading: 0.010648522822412895
-# Swashplate Rotor 216: 0.008519388517333191
-# Swashplate Rotor 144: 0.006979004971880761
-# Main Rotor Pos: 0.004851132719865073
-# GPS 1 DME Distance: 0.0030321744370437657
-# Roll Rate: 0.002180796217364862
-# Roll Acceleration: 0.0016402372094620986
-# NAV 2 NAV ID: 0.0008388676276857117
-# Heading Path: 0.0007788362622645159
-# Pitch Acceleration: 0.00042640108875176676
-# Induced Velo Behind Disc-[1]: 0.0004021216712105926
-# Flight Path Angle - VV-[0]: 0.00018044632564056035
-# GPS Hor Deviation: 0.0001093380940175685
-# Swashplate Phase: 1.8493400171409013e-13
+# Heading(mag): 0.18877636848104615
+# Transmission Chip Warning: 0.16453997340913962
+# Ground Track - VV-[2]: 0.14508524708793535
+# Flight Path Angle - VV-[0]: 0.10296199009725504
+# Transmission Oil Temp Warning: 0.07965926418227508
+# Turn Rate: 0.07495080551143295
+# Baro Setting Pilot: 0.05610011618464458
+# Right Brake Pos: 0.0524722462763778
+# TOGA Status: 0.05057122210309971
+# Acceleration in Normal: 0.026162563811435585
+# Ground Track Copilot: 0.01756437605402702
+# NAV 2 DME Speed: 0.016166003845747526
+# NAV 2 DME Distance: 0.014527569545151654
+# Yaw Rate: 0.005808970336183176
+# Yaw Acceleration: 0.0018848388599306738
+# Flight Path Angle - VV-[1]: 0.001119721103937614
+# Acceleration in Latitude: 0.0007019428298626385
+# AP1 Status: 0.0005950836101104052
+# Flight Path Angle - VV-[2]: 0.00035169667010582405
+# Tail Rotor Chip Warning: 2.0295617887153638e-13
+# Nav1 Ver Deviation: 9.864319043187931e-14

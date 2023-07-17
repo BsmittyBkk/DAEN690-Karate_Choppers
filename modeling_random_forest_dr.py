@@ -12,7 +12,7 @@ path = r'../CSV'
 # the below function verifies that the dataframe you are working with is the same shape as the anticipated dataframe
 def test_dataframe_shape():
     # load the dataframe to be tested
-    with open(f'{path}/working_df2.pkl', 'rb') as file:
+    with open(f'{path}/working_df_aws.pkl', 'rb') as file:
         df = pickle.load(file)
     # Perform the shape validation
     # assert df.shape == (258905, 118)
@@ -22,7 +22,7 @@ def test_dataframe_shape():
 df = test_dataframe_shape().reset_index(drop=True)
 
 ## to test on Dynamic Rollover
-df = df.drop(columns=['Label', 'LOW-G', 'Swashplate Rotor 216', 'Swashplate Phase', 'Main Rotor Angle Slow', 'Swashplate Rotor 072'])
+df = df.drop(columns=['LOW-G', 'NAV 2 DME Time', 'GPS 1 DME Time', 'NAV 2 NAV ID', 'GPS 1 NAV ID', 'FMS Waypoints'])
 # Swashplate Rotor 216: 0.0
 # Swashplate Phase: 0.0
 # Main Rotor Angle Slow: 0.0
@@ -50,8 +50,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratif
 params = {
     'rf__n_estimators': [50],  # 100, 200
     'rf__max_depth': [None],  # 5, 10
-    'rf__min_samples_split': [2],  # 5, 10
-    'rf__min_samples_leaf': [1],  # 2, 4
+    'rf__min_samples_split': [10],  # 5, 10
+    'rf__min_samples_leaf': [2],  # 2, 4
     'rf__max_features': ['log2'],  # 'sqrt'
     'rf__bootstrap': [False],  # True
     'rf__class_weight': ['balanced'],
@@ -75,7 +75,17 @@ best_model = grid_search.best_estimator_
 y_pred = best_model.predict(X_test)
 
 print(classification_report(y_test, y_pred))
+#               precision    recall  f1-score   support
+
+#            0       1.00      1.00      1.00     51270
+#            1       1.00      1.00      1.00       511
+
+#     accuracy                           1.00     51781
+#    macro avg       1.00      1.00      1.00     51781
+# weighted avg       1.00      1.00      1.00     51781
 print(confusion_matrix(y_test, y_pred))
+# [[51268     2]
+#  [    2   509]]
 print(best_params)
 
 # Access and sort feature importances
@@ -90,28 +100,24 @@ print("Most important variables:")
 for i in sorted_indices:
     print(f"{feature_names[i]}: {importances[i]}")
 # Most important variables:
-# Heading(mag): 0.1333131638933488
-# Vert. Speed: 0.11467235716814925
-# Pitch Rate: 0.08352635652141906
-# Ground Track - VV-[0]: 0.07916883017326566
-# Pitch Path: 0.06812558393239819
-# NAV 1 DME Time: 0.052290925703181224
-# GPS 1 DME Speed: 0.047630667898031824
-# Main Rotor Pos: 0.04753005588430459
-# Roll Rate: 0.0391460816982194
-# Induced Velo Behind Disc-[1]: 0.035936186446882484
-# NAV 1 DME Speed: 0.03189322373131597
-# Roll Acceleration: 0.031576941072159005
-# Compass Heading: 0.030373178934428733
-# Swashplate Rotor 000: 0.027274968668887904
-# Swashplate Rotor 144: 0.024423913534007625
-# Heading Path: 0.023596783091042645
-# Pedal Pos: 0.019974152832028687
-# GPS 1 DME Distance: 0.019294332239174913
-# Yaw Acceleration: 0.019257277527676055
-# Induced Velo Behind Disc-[0]: 0.01903254536940032
-# Swashplate Rotor 288: 0.01565642525317144
-# Flight Path Angle - VV-[0]: 0.013726643211687735
-# GPS Hor Deviation: 0.011604542503929647
-# Pitch Acceleration: 0.007547200927142835
-# NAV 2 NAV ID: 0.003427661784746056
+# Heading(mag): 0.1437407673420177
+# Turn Rate: 0.1185320266676465
+# Flight Path Angle - VV-[0]: 0.10821062115204479
+# Baro Setting Pilot: 0.10193915453600468
+# Ground Track - VV-[2]: 0.07623026321084747
+# Transmission Chip Warning: 0.0633665947158324
+# Transmission Oil Temp Warning: 0.04490843730821574
+# Yaw Acceleration: 0.03749175846094667
+# AP1 Status: 0.0333328903284939
+# Ground Track Copilot: 0.032485752261187655
+# Nav1 Ver Deviation: 0.030710511979500074
+# Right Brake Pos: 0.028245172446840064
+# NAV 2 DME Distance: 0.026887564983904436
+# Yaw Rate: 0.02608253197107238
+# NAV 2 DME Speed: 0.02599966347206947
+# Flight Path Angle - VV-[1]: 0.02208851808661065
+# Acceleration in Normal: 0.021367554052364103
+# Tail Rotor Chip Warning: 0.019867776341259483
+# TOGA Status: 0.0167248970251227
+# Acceleration in Latitude: 0.012480979110518821
+# Flight Path Angle - VV-[2]: 0.00930656454750032

@@ -7,7 +7,7 @@ path = r'../CSV'
 # the below function verifies that the dataframe you are working with is the same shape as the anticipated dataframe
 def test_dataframe_shape():
     # load the dataframe to be tested
-    with open(f'{path}/working_df2.pkl', 'rb') as file:
+    with open(f'{path}/working_df_aws.pkl', 'rb') as file:
         df = pickle.load(file)
     # Perform the shape validation
     # assert df.shape == (27572, 31)

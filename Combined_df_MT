@@ -3,38 +3,30 @@
 
 # In[1]:
 
-
 import pickle
 import os
 import re
 import glob
 import pandas as pd
 
-
 # In[2]:
-
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
 path = r'C:\RotorCraftData\CSV'
 pattern = r'.*2023\.06\.15.*\.csv$'
 
-
 # In[3]:
-
 
 # this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in
 #with open('./src/use_cols.pkl', 'rb') as f:
  #   use_cols = pickle.load(f)
 
-
 # In[4]:
-
 
 # this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in
 with open('./use_cols.pkl', 'rb') as f:
     use_cols = pickle.load(f)
-
 
 # In[5]:
 

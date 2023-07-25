@@ -10,17 +10,17 @@ path = r'C:\RotorCraftData\CSV'
 pattern = r'.*2023\.06\.15.*\.csv$'
 
 # this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in
-with open('./src/use_cols.pkl', 'rb') as f:
+with open('./src/use_cols_aws.pkl', 'rb') as f:
     use_cols = pickle.load(f)
 
 # the data will be labeled using the information from the flight logs
 label_table = pd.DataFrame({
-    'Date': ['2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15'],  # Replace with actual dates of maneuvers
+    'Date': ['2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15', '2023-06-15'], 
     # Replace with actual start time of maneuvers
     'StartTime': ['13:22:15.0', '13:25:25.0', '13:29:25.0', '11:56:25.0', '11:58:03.0', '11:59:51.0', '16:10:04.0', '16:11:41.0', '16:14:20.0', '13:43:12.0', '13:44:10.0', '13:45:19.0', '12:08:11.0', '12:09:31.0', '12:10:51.0', '16:34:28.0', '16:35:06.0', '16:38:26.0'],
     # Replace with actual end time of maneuvers
     'EndTime': ['13:22:25.0', '13:25:38.0', '13:29:40.0', '11:56:38.0', '11:58:24.0', '12:00:00.0', '16:10:12.0', '16:11:46.0', '16:14:29.0', '13:43:35.0', '13:44:18.0', '13:45:30.0', '12:08:35.0', '12:09:52.0', '12:11:18.0', '16:34:42.0', '16:35:27.0', '16:38:36.0'],
-    'Label': ['Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G']  # Replace with maneuver names
+    'Label': ['Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'Dynamic Rollover', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G', 'LOW-G']  
 })
 
 # convert date, start time, and end time columns to datetime type
@@ -80,7 +80,7 @@ def combine_csv_files(csv_directory, columns_to_use, label_df):
     # Filter the DataFrame to include rows between the start and end times
     combined_df = combined_df[(combined_df['System UTC Time'] >= start_time) & (combined_df['System UTC Time'] <= end_time)].copy()
 
-    combined_df.drop(['Elapsed Time', 'Date', 'System UTC Time'], inplace=True, axis=1)
+    combined_df.drop(['Elapsed Time', 'Date', 'System UTC Time', 'Label'], inplace=True, axis=1)
     
     return combined_df
 
@@ -88,5 +88,5 @@ def combine_csv_files(csv_directory, columns_to_use, label_df):
 df = combine_csv_files(path, use_cols, label_table)
 # this will create a pickle file with the working dataframe in your directory with the original CSV files
 # you will not need to run this script again, as we will load in the dataframe from the pickle file
-with open(f'{path}/working_df2.pkl', 'wb') as f:
+with open(f'{path}/working_df_aws.pkl', 'wb') as f:
     pickle.dump(df, f)

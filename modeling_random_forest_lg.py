@@ -12,7 +12,7 @@ path = r'../CSV'
 # the below function verifies that the dataframe you are working with is the same shape as the anticipated dataframe
 def test_dataframe_shape():
     # load the dataframe to be tested
-    with open(f'{path}/working_df_aws.pkl', 'rb') as file:
+    with open(f'{path}/low_g.pkl', 'rb') as file:
         df = pickle.load(file)
     # Perform the shape validation
     # assert df.shape == (258905, 118)
@@ -22,14 +22,9 @@ def test_dataframe_shape():
 df = test_dataframe_shape().reset_index(drop=True)
 
 ## to test on Low-G
-df = df.drop(columns=['Dynamic Rollover', 'NAV 2 DME Time', 'GPS 1 DME Time', 'NAV 2 NAV ID', 'GPS 1 NAV ID', 'FMS Waypoints'])
-# Main Rotor Angle Slow: 0.0
-# Swashplate Rotor 072: 0.0
-# Swashplate Rotor 288: 0.0
-
 # define X and y Dynamic Rollover
-X = df.drop('LOW-G', axis=1)
-y = df['LOW-G']
+X = df.drop('label_LOW-G', axis=1)
+y = df['label_LOW-G']
 
 # create training set and testing set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)

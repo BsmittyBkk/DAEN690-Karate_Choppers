@@ -8,19 +8,19 @@ Created on Sat Jul 22 15:27:31 2023
 import pandas as pd
 import glob
 import os
-
+import pickle
 # Importing Data 
 
-df1 = pd.read_csv("C:\DAEN690\Data/SimData_2023.06.15_09.19.14.csv")
+df1 = pd.read_csv("../CSV/SimData_2023.06.15_09.19.14.csv")
 
 ## get column names
 column_names = list(df1.columns)
 
 ## concatenate csv files
 ## remove first three rows of each file(heading,units, and scenario start rows)
-path = r'C:\DAEN690\Data'
+path = r'../CSV'
 folder = glob.glob(os.path.join(path, "*.csv"))
-df = (pd.read_csv(f, names = column_names, skiprows=3, skipfooter = 1) for f in folder)
+df = (pd.read_csv(f, names = column_names, skiprows=3, skipfooter = 1, engine='python') for f in folder)
 df_concat = pd.concat(df,ignore_index=True)
 
 # Cleaning Data
@@ -83,3 +83,9 @@ df_dr = df[['Roll Acceleration','Pitch Acceleration','Yaw Acceleration','Roll','
 
 df_lg = df[['Airspeed(True)','Flight Path Angle - VV-[0]','Induced Velo Behind Disc-[0]','Pitch','Pitch Acceleration',
               'Roll','Rotor RPM-[0]','Sideslip Angle','Yaw Acceleration','label_LOW-G']]
+
+with open(f'{path}/dynamic_rollover.pkl', 'wb') as f:
+    pickle.dump(df_dr, f)
+
+with open(f'{path}/low_g.pkl', 'wb') as f:
+    pickle.dump(df_lg, f)

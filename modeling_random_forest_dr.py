@@ -12,7 +12,7 @@ path = r'../CSV'
 # the below function verifies that the dataframe you are working with is the same shape as the anticipated dataframe
 def test_dataframe_shape():
     # load the dataframe to be tested
-    with open(f'{path}/working_df_aws.pkl', 'rb') as file:
+    with open(f'{path}/dynamic_rollover.pkl', 'rb') as file:
         df = pickle.load(file)
     # Perform the shape validation
     # assert df.shape == (258905, 118)
@@ -22,18 +22,12 @@ def test_dataframe_shape():
 df = test_dataframe_shape().reset_index(drop=True)
 
 ## to test on Dynamic Rollover
-df = df.drop(columns=['LOW-G', 'NAV 2 DME Time', 'GPS 1 DME Time', 'NAV 2 NAV ID', 'GPS 1 NAV ID', 'FMS Waypoints'])
-# Swashplate Rotor 216: 0.0
-# Swashplate Phase: 0.0
-# Main Rotor Angle Slow: 0.0
-# Swashplate Rotor 072: 0.0
-
 ## to test on LOW-G
 # df = df.drop(columns=['Label', 'Dynamic Rollover'])
 
 # define X and y Dynamic Rollover
-X = df.drop('Dynamic Rollover', axis=1)
-y = df['Dynamic Rollover']
+X = df.drop('label_Dynamic Rollover', axis=1)
+y = df['label_Dynamic Rollover']
 
 # define X and y for LOW-G
 # X = df.drop('LOW-G', axis=1)

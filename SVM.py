@@ -27,9 +27,9 @@ df = return_df()
 print(df.columns)
 ## split test and training 
 x = df.copy()
-x = x.drop(columns=['LOW-G'])
-y = pd.DataFrame(df['LOW-G'])
-x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.25, random_state=71)
+x = x.drop(columns=['NAV 2 NAV ID','Label','Dynamic Rollover','LOW-G'])
+y = pd.DataFrame(df['Dynamic Rollover'])
+x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.2, random_state=42)
    
 ## check number of records
 print(x_test.shape[0]) #121868
@@ -43,7 +43,7 @@ print(np.array((unique, counts)).T) # [(0: 121415), (1:453)] (0.37%)
 
 ## Randomly oversample the minority class
 
-ros = RandomOverSampler(random_state=71)
+ros = RandomOverSampler(random_state=42)
 x_train_ros, y_train_ros = ros.fit_resample(x_train, y_train)
 
 unique, counts = np.unique(y_train_ros, return_counts=True)
@@ -51,7 +51,7 @@ print(np.array((unique, counts)).T) #[(0: 364333), (1:364333)] (50%)
 
 ## SMOTE oversampling
 
-smote = SMOTE(random_state=71)
+smote = SMOTE(random_state=42)
 x_train_smote, y_train_smote = smote.fit_resample(x_train, y_train)
 
 unique, counts = np.unique(y_train_smote, return_counts=True)
@@ -59,7 +59,7 @@ print(np.array((unique, counts)).T) #[(0: 364333), (1:364333)] (50%)
  
 ## Randomly undersample the minority class
 
-rus = RandomUnderSampler(random_state=71)
+rus = RandomUnderSampler(random_state=42)
 x_train_rus, y_train_rus= rus.fit_resample(x_train, y_train)
 
 unique, counts = np.unique(y_train_rus, return_counts=True)

@@ -1,17 +1,16 @@
 import pickle
 import os
 import re
-import glob
 import pandas as pd
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
-path = r'C:\RotorCraftData\CSV'
+path = r'../CSV'
 pattern = r'.*2023\.06\.15.*\.csv$'
 
-# this imports a list of columns that was saved after the removal of variance on a single CSV, this list will be used to define which columns to read in
-with open('./src/use_cols.pkl', 'rb') as f:
-    use_cols = pickle.load(f)
+use_cols_dr = ['Elapsed Time', 'Date', 'System UTC Time', 'Roll Acceleration', 'Pitch Acceleration', 'Yaw Acceleration', 'Roll', 'Roll Rate', 'Pitch Rate', 'Groundspeed', 'Wind Speed(True)', 'Wind Direction(Mag)', 'Gross Weight', 'Fuel Weight']
+
+use_cols_lg = ['Elapsed Time', 'Date', 'System UTC Time', 'Airspeed(True)', 'Flight Path Angle - VV-[0]', 'Induced Velo Behind Disc-[0]', 'Pitch', 'Pitch Acceleration', 'Roll', 'Rotor RPM-[0]', 'Sideslip Angle',' Yaw Acceleration']
 
 # the data will be labeled using the information from the flight logs
 label_table = pd.DataFrame({
@@ -80,13 +79,20 @@ def combine_csv_files(csv_directory, columns_to_use, label_df):
     # Filter the DataFrame to include rows between the start and end times
     combined_df = combined_df[(combined_df['System UTC Time'] >= start_time) & (combined_df['System UTC Time'] <= end_time)].copy()
 
-    combined_df.drop(['Elapsed Time', 'Date', 'System UTC Time'], inplace=True, axis=1)
+    combined_df.drop(['Elapsed Time', 'Date', 'System UTC Time', 'Label'], inplace=True, axis=1)
     
     return combined_df
 
 # this calls the function from above that cleans and creates dummy variables for our target variables
-df = combine_csv_files(path, use_cols, label_table)
+df_dr = combine_csv_files(path, use_cols_dr, label_table)
+df_dr.drop(['LOW-G'], inplace=True, axis=1)
+
+df_lg = combine_csv_files(path, use_cols_lg, label_table)
+df_lg.drop(['Dynamic Rollover'], inplace=True, axis=1)
 # this will create a pickle file with the working dataframe in your directory with the original CSV files
 # you will not need to run this script again, as we will load in the dataframe from the pickle file
-with open(f'{path}/working_df2.pkl', 'wb') as f:
-    pickle.dump(df, f)
+with open(f'{path}/dynamic_rollover.pkl', 'wb') as f:
+    pickle.dump(df_dr, f)
+
+with open(f'{path}/low_g.pkl', 'wb') as f:
+    pickle.dump(df_lg, f)

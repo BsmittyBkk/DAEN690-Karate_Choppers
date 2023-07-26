@@ -26,8 +26,8 @@ df = test_dataframe_shape().reset_index(drop=True)
 # df = df.drop(columns=['Label', 'Dynamic Rollover'])
 
 # define X and y Dynamic Rollover
-X = df.drop('label_Dynamic Rollover', axis=1)
-y = df['label_Dynamic Rollover']
+X = df.drop('Dynamic Rollover', axis=1)
+y = df['Dynamic Rollover']
 
 # define X and y for LOW-G
 # X = df.drop('LOW-G', axis=1)

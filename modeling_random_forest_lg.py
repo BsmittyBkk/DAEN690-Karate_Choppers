@@ -23,8 +23,8 @@ df = test_dataframe_shape().reset_index(drop=True)
 
 ## to test on Low-G
 # define X and y Dynamic Rollover
-X = df.drop('label_LOW-G', axis=1)
-y = df['label_LOW-G']
+X = df.drop('LOW-G', axis=1)
+y = df['LOW-G']
 
 # create training set and testing set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)

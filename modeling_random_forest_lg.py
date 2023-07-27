@@ -92,24 +92,12 @@ print("Most important variables:")
 for i in sorted_indices:
     print(f"{feature_names[i]}: {importances[i]}")
 # Most important variables:
-# Heading(mag): 0.18877636848104615
-# Transmission Chip Warning: 0.16453997340913962
-# Ground Track - VV-[2]: 0.14508524708793535
-# Flight Path Angle - VV-[0]: 0.10296199009725504
-# Transmission Oil Temp Warning: 0.07965926418227508
-# Turn Rate: 0.07495080551143295
-# Baro Setting Pilot: 0.05610011618464458
-# Right Brake Pos: 0.0524722462763778
-# TOGA Status: 0.05057122210309971
-# Acceleration in Normal: 0.026162563811435585
-# Ground Track Copilot: 0.01756437605402702
-# NAV 2 DME Speed: 0.016166003845747526
-# NAV 2 DME Distance: 0.014527569545151654
-# Yaw Rate: 0.005808970336183176
-# Yaw Acceleration: 0.0018848388599306738
-# Flight Path Angle - VV-[1]: 0.001119721103937614
-# Acceleration in Latitude: 0.0007019428298626385
-# AP1 Status: 0.0005950836101104052
-# Flight Path Angle - VV-[2]: 0.00035169667010582405
-# Tail Rotor Chip Warning: 2.0295617887153638e-13
-# Nav1 Ver Deviation: 9.864319043187931e-14
+# Airspeed(True): 0.2934995813853124
+# Flight Path Angle - VV-[0]: 0.16214043880720036
+#  Yaw Acceleration: 0.15843800746908696
+# Pitch Acceleration: 0.156856111080751
+# Roll: 0.14248434507257696
+# Induced Velo Behind Disc-[0]: 0.0549867311439648
+# Pitch: 0.026460552238794365
+# Rotor RPM-[0]: 0.004159276489398642
+# Sideslip Angle: 0.0009749563129147023

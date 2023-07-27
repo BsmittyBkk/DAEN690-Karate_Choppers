@@ -44,10 +44,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratif
 params = {
     'rf__n_estimators': [50],  # 100, 200
     'rf__max_depth': [None],  # 5, 10
-    'rf__min_samples_split': [10],  # 5, 10
+    'rf__min_samples_split': [5],  # 5, 10
     'rf__min_samples_leaf': [2],  # 2, 4
     'rf__max_features': ['log2'],  # 'sqrt'
-    'rf__bootstrap': [False],  # True
+    'rf__bootstrap': [True],  # False
     'rf__class_weight': ['balanced'],
     'rf__random_state': [42],
     'rf__n_jobs': [-1]
@@ -94,24 +94,15 @@ print("Most important variables:")
 for i in sorted_indices:
     print(f"{feature_names[i]}: {importances[i]}")
 # Most important variables:
-# Heading(mag): 0.1437407673420177
-# Turn Rate: 0.1185320266676465
-# Flight Path Angle - VV-[0]: 0.10821062115204479
-# Baro Setting Pilot: 0.10193915453600468
-# Ground Track - VV-[2]: 0.07623026321084747
-# Transmission Chip Warning: 0.0633665947158324
-# Transmission Oil Temp Warning: 0.04490843730821574
-# Yaw Acceleration: 0.03749175846094667
-# AP1 Status: 0.0333328903284939
-# Ground Track Copilot: 0.032485752261187655
-# Nav1 Ver Deviation: 0.030710511979500074
-# Right Brake Pos: 0.028245172446840064
-# NAV 2 DME Distance: 0.026887564983904436
-# Yaw Rate: 0.02608253197107238
-# NAV 2 DME Speed: 0.02599966347206947
-# Flight Path Angle - VV-[1]: 0.02208851808661065
-# Acceleration in Normal: 0.021367554052364103
-# Tail Rotor Chip Warning: 0.019867776341259483
-# TOGA Status: 0.0167248970251227
-# Acceleration in Latitude: 0.012480979110518821
-# Flight Path Angle - VV-[2]: 0.00930656454750032
+# Pitch Acceleration: 0.17851542451386945
+# Roll Acceleration: 0.16179783106270154
+# Wind Direction(Mag): 0.12959880208467317
+# Roll Rate: 0.1202688704160081
+# Pitch Rate: 0.10789304892965978
+# Yaw Acceleration: 0.08247524752210915
+# Roll: 0.07344647020163995
+# Gross Weight: 0.05481042394897525
+# Groundspeed: 0.04017394841957257
+# Wind Speed(True): 0.03749036364926704
+# Fuel Weight: 0.013529569251524105
+

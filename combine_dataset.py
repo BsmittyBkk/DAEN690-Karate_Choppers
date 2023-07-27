@@ -5,12 +5,16 @@ import pandas as pd
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
-path = r'../CSV'
+path = r'C:\DAEN690\Data'
 pattern = r'.*2023\.06\.15.*\.csv$'
 
-use_cols_dr = ['Elapsed Time', 'Date', 'System UTC Time', 'Roll Acceleration', 'Pitch Acceleration', 'Yaw Acceleration', 'Roll', 'Roll Rate', 'Pitch Rate', 'Groundspeed', 'Wind Speed(True)', 'Wind Direction(Mag)', 'Gross Weight', 'Fuel Weight']
+use_cols_dr = ['Elapsed Time', 'Date', 'System UTC Time', 'Altitude(MSL)', 'Altitude(AGL)', 'Roll Acceleration', 'Pitch Acceleration', 'Yaw Acceleration', 
+               'Roll', 'Pitch', 'Yaw', 'Roll Rate', 'Pitch Rate', 'Yaw Rate', 'Groundspeed', 'Wind Speed(True)', 'Sideslip Angle', 'Gross Weight', 'Cyclic Pitch Pos-[0]', 
+               'Cyclic Roll Pos-[0]', 'Collective Pos-[0]', 'Pedal Pos', 'Rotor Torque-[0]']
 
-use_cols_lg = ['Elapsed Time', 'Date', 'System UTC Time', 'Airspeed(True)', 'Flight Path Angle - VV-[0]', 'Induced Velo Behind Disc-[0]', 'Pitch', 'Pitch Acceleration', 'Roll', 'Rotor RPM-[0]', 'Sideslip Angle',' Yaw Acceleration']
+use_cols_lg = ['Elapsed Time', 'Date', 'System UTC Time', 'Altitude(MSL)', 'Altitude(AGL)', 'Airspeed(True)', 'Flight Path Angle - VV-[0]', 'Roll Acceleration', 
+               'Pitch Acceleration', 'Yaw Acceleration', 'Roll', 'Pitch', 'Yaw', 'Rotor RPM-[0]', 'Sideslip Angle', 'Vert. Speed', 'Gross Weight','Cyclic Pitch Pos-[0]', 
+               'Cyclic Roll Pos-[0]', 'Collective Pos-[0]', 'Pedal Pos', 'Rotor Torque-[0]', 'Wind Speed(True)']
 
 # the data will be labeled using the information from the flight logs
 label_table = pd.DataFrame({

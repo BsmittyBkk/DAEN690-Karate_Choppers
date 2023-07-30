@@ -115,7 +115,7 @@ plt.grid(True)
 plt.show()
 
 
-# Assuming X_train and y_train are your training data
+#  cross validation to find the most efficient number of principal components to use
 components_range = range(1, len(x_resampled_dr.columns) + 1)
 cv_scores = []
 

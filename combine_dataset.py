@@ -5,7 +5,7 @@ import pandas as pd
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
-path = r'C:\DAEN690\Data'
+path = r'../CSV'
 pattern = r'.*2023\.06\.15.*\.csv$'
 
 use_cols_dr = ['Elapsed Time', 'Date', 'System UTC Time', 'Altitude(MSL)', 'Altitude(AGL)', 'Roll Acceleration', 'Pitch Acceleration', 'Yaw Acceleration', 

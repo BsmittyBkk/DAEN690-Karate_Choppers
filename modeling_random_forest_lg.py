@@ -65,20 +65,20 @@ best_model = grid_search.best_estimator_
 y_pred = best_model.predict(X_test)
 
 # print outputs
-print(classification_report(y_test, y_pred))
+print(classification_report(y_test, y_pred, digits=4))
 #               precision    recall  f1-score   support
 
-#            0       1.00      1.00      1.00     51437
-#            1       1.00      1.00      1.00       344
+#            0     1.0000    1.0000    1.0000     51437
+#            1     1.0000    0.9971    0.9985       344
 
-#     accuracy                           1.00     51781
-#    macro avg       1.00      1.00      1.00     51781
-# weighted avg       1.00      1.00      1.00     51781
+#     accuracy                         1.0000     51781
+#    macro avg     1.0000    0.9985    0.9993     51781
+# weighted avg     1.0000    1.0000    1.0000     51781
 print(confusion_matrix(y_test, y_pred))
 # [[51437     0]
 #  [    1   343]]
 print(best_params)
-# 'rf__bootstrap': True, 'rf__class_weight': 'balanced', 'rf__max_depth': None, 'rf__max_features': 'sqrt', 'rf__min_samples_leaf': 1, 'rf__min_samples_split': 2, 'rf__n_estimators': 50, 'rf__n_jobs': -1, 'rf__random_state': 42
+# {'rf__bootstrap': True, 'rf__class_weight': 'balanced', 'rf__max_depth': None, 'rf__max_features': 'log2', 'rf__min_samples_leaf': 1, 'rf__min_samples_split': 2, 'rf__n_estimators': 50, 'rf__n_jobs': -1, 'rf__random_state': 42}
 
 # access and sort feature importances
 importances = best_model.named_steps['rf'].feature_importances_
@@ -92,12 +92,22 @@ print("Most important variables:")
 for i in sorted_indices:
     print(f"{feature_names[i]}: {importances[i]}")
 # Most important variables:
-# Airspeed(True): 0.2934995813853124
-# Flight Path Angle - VV-[0]: 0.16214043880720036
-#  Yaw Acceleration: 0.15843800746908696
-# Pitch Acceleration: 0.156856111080751
-# Roll: 0.14248434507257696
-# Induced Velo Behind Disc-[0]: 0.0549867311439648
-# Pitch: 0.026460552238794365
-# Rotor RPM-[0]: 0.004159276489398642
-# Sideslip Angle: 0.0009749563129147023
+# Altitude(MSL): 0.28447842882329966
+# Yaw: 0.1467434258765614
+# Yaw Acceleration: 0.13668113110557897
+# Gross Weight: 0.08385280109191866
+# Altitude(AGL): 0.07968419860708995
+# Pitch Acceleration: 0.07864012393187736
+# Vert. Speed: 0.0502623696731662
+# Cyclic Pitch Pos-[0]: 0.04893398302304429
+# Roll Acceleration: 0.045921583240967866
+# Airspeed(True): 0.017247984244272055
+# Rotor Torque-[0]: 0.010176746962487609
+# Collective Pos-[0]: 0.007324957896244195
+# Rotor RPM-[0]: 0.0039711342713507885
+# Cyclic Roll Pos-[0]: 0.0020151047593346878
+# Sideslip Angle: 0.0019747532238404424
+# Roll: 0.0017344549753597071
+# Pitch: 0.0003568182936061047
+# Pedal Pos: 0.0
+# Wind Speed(True): 0.0

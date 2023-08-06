@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jul 22 15:43:52 2023
-
-@author: jetow
-"""
-
+import pickle
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,24 +10,23 @@ from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_sc
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 import time
+from pathlib import Path
 
 
-print(df_dr.columns)
-## split test and training 
-x = df_dr.copy()
-x = x.drop(columns=['Dynamic Rollover'])
-y = pd.DataFrame(df_dr['Dynamic Rollover'])
-x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.25, random_state=42)
-   
-## check number of records
-print(x_test.shape[0])
-print(x_train.shape[0])
+# this is the path to your pickle file (should be the same location as CSVs)
+path = Path('../../CSV')
 
-## check value counts for y_train/y_test
-unique, counts = np.unique(y_train, return_counts=True)
-print(np.array((unique, counts)).T)
-unique, counts = np.unique(y_test, return_counts=True)
-print(np.array((unique, counts)).T)
+with open(f'{path}/low_g.pkl', 'rb') as file:
+    df = pickle.load(file)
+
+# drop index
+df = df.reset_index(drop=True)
+# define independent variables and dependent variable
+X = df.drop('LOW-G', axis=1)
+y = df['LOW-G']
+
+# create training set and testing set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
 ## Standardize data
 

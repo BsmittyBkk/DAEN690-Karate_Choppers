@@ -13,7 +13,7 @@ from pathlib import Path
 # this is the path to your pickle file (should be the same location as CSVs)
 path = Path('../data')
 
-with open(path / 'low_g.pkl', 'rb') as file:
+with open(path / 'low_g_pandas_2.0.2.pkl', 'rb') as file:
     df = pickle.load(file)
 
 # drop index and create X and y

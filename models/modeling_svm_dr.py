@@ -13,7 +13,7 @@ from pathlib import Path
 # this is the path to your pickle file (should be the same location as CSVs)
 path = Path('../data')
 
-with open(path / 'dynamic_rollover.pkl', 'rb') as file:
+with open(path / 'data/dynamic_rollover_pandas_2.0.2.pkl', 'rb') as file:
     df = pickle.load(file)
 
 # drop index and create X and y

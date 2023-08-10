@@ -2,10 +2,11 @@ import pickle
 import os
 import re
 import pandas as pd
+from pathlib import Path
 
 # this is the path to the folder where you have the CSVs, NO OTHER CSVs SHOULD BE PRESENT
 # please make sure this path is not inside the scope of GitHub so we do not go over on data for our repo
-path = r'../CSV'
+path = Path('../../CSV')
 pattern = r'.*2023\.06\.15.*\.csv$'
 
 use_cols_dr = ['Elapsed Time', 'Date', 'System UTC Time', 'Altitude(MSL)', 'Altitude(AGL)', 'Roll Acceleration', 'Pitch Acceleration', 'Yaw Acceleration', 

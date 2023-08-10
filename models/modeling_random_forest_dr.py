@@ -1,13 +1,13 @@
 import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
-from sklearn.metrics import classification_report, confusion_matrix, make_scorer, recall_score
+from sklearn.metrics import classification_report, confusion_matrix, make_scorer, f1_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from pathlib import Path
 
 # this is the path to your pickle file (should be the same location as CSVs)
-path = Path('../../CSV')
+path = Path('../data')
 
 with open(f'{path}/dynamic_rollover.pkl', 'rb') as file:
     df = pickle.load(file)
@@ -23,12 +23,12 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratif
 
 # parameter grid for finding the best hyperparameters
 params = {
-    'rf__n_estimators': [50, 100, 200],  # 100, 200
-    'rf__max_depth': [None, 5, 10],  # 5, 10
-    'rf__min_samples_split': [2, 5, 10],  # 5, 10
-    'rf__min_samples_leaf': [1, 2, 4],  # 2, 4
-    'rf__max_features': ['log2', 'sqrt'],  # 'sqrt'
-    'rf__bootstrap': [True, False],  # False
+    'rf__n_estimators': [200],  # 100, 200
+    'rf__max_depth': [None],  # 5, 10
+    'rf__min_samples_split': [2],  # 5, 10
+    'rf__min_samples_leaf': [1],  # 2, 4
+    'rf__max_features': ['log2'],  # 'sqrt'
+    'rf__bootstrap': [True],  # False
     'rf__class_weight': ['balanced'],
     'rf__random_state': [42],
     'rf__n_jobs': [-1]
@@ -39,12 +39,12 @@ pipe = Pipeline([
     ('rf', RandomForestClassifier())
 ])
 
-# create recall_scorer to use in the grid search
-recall_scorer = make_scorer(recall_score)
+# create f1_scorer to use in the grid search
+f1_scorer = make_scorer(f1_score)
 # set up k-fold cross validation
 strat_k_fold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 # instantiate the grid search loading pipeline, parameters, k-fold, and scorer
-grid_search = GridSearchCV(estimator=pipe, param_grid=params, cv=strat_k_fold, scoring=recall_scorer)
+grid_search = GridSearchCV(estimator=pipe, param_grid=params, cv=strat_k_fold, scoring=f1_scorer)
 # fit the grid search
 grid_search.fit(X_train, y_train)
 

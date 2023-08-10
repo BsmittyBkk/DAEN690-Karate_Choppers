@@ -2,23 +2,27 @@ import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import confusion_matrix, classification_report, make_scorer, recall_score
+from sklearn.metrics import confusion_matrix, classification_report, make_scorer, f1_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from pathlib import Path
 
 # this is the path to your pickle file (should be the same location as CSVs)
-path = Path('../../CSV')
+path = Path('../data')
 
 with open(path / 'dynamic_rollover.pkl', 'rb') as file:
     df = pickle.load(file)
 
+# drop index
 df = df.reset_index(drop=True)
+# define independent variables and dependent variable
 X = df.drop('Dynamic Rollover', axis=1)
 y = df['Dynamic Rollover']
 
+# create training set and testing set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
+# parameter grid for finding the best hyperparameters, only using top performing hyperparameters others are commented out for reference
 params = {
     'dt__max_depth': [None],  # 3, 5, 7, 10, 20
     'dt__min_samples_split': [5],  # 2, 10, 20, 30
@@ -29,21 +33,25 @@ params = {
     'dt__random_state': [42]
 }
 
+# create a pipeline to test the model
 pipe = Pipeline([
     ('dt', DecisionTreeClassifier())
 ])
 
-# Grid search with cross-validation
-recall_scorer = make_scorer(recall_score)
+# grid search with cross-validation
+f1_scorer = make_scorer(f1_score)
 strat_k_fold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-grid_search = GridSearchCV(estimator=pipe, param_grid=params, cv=strat_k_fold, scoring=recall_scorer)
+grid_search = GridSearchCV(estimator=pipe, param_grid=params, cv=strat_k_fold, scoring=f1_scorer)
 grid_search.fit(X_train, y_train)
 
+# save the best parameters from the grid search and the model with those parameters
 best_params = grid_search.best_params_
 best_model = grid_search.best_estimator_  
 
+# predict on the test set with the best model
 y_pred = best_model.predict(X_test)
 
+# print the classification report comparing the predicted values to the true values
 print(classification_report(y_test, y_pred, digits=4))
 #               precision    recall  f1-score   support
 
@@ -53,19 +61,24 @@ print(classification_report(y_test, y_pred, digits=4))
 #     accuracy                         0.9999     51781
 #    macro avg     0.9990    0.9971    0.9980     51781
 # weighted avg     0.9999    0.9999    0.9999     51781
+
+# confusion matrix for specific results
 print(confusion_matrix(y_test, y_pred))
 # [[51269     1]
 #  [    3   508]]
+
+# best hyperparameters to use for later analysis
 print(best_params)
 # {'dt__class_weight': 'balanced', 'dt__criterion': 'entropy', 'dt__max_depth': None, 'dt__max_features': 'sqrt', 'dt__min_samples_split': 5, 'dt__random_state': 42, 'dt__splitter': 'best'}
-# Access and sort feature importances
+
+# access and sort feature importances
 importances = best_model.named_steps['dt'].feature_importances_
 sorted_indices = importances.argsort()[::-1]
 
-# Retrieve feature names
+# retrieve feature names
 feature_names = list(X_train.columns)
 
-# Print the most important variables
+# print the most important variables
 print("Most important variables:")
 for i in sorted_indices:
     print(f"{feature_names[i]}: {importances[i]}")

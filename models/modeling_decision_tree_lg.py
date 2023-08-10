@@ -2,13 +2,13 @@ import pickle
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.metrics import recall_score, confusion_matrix, classification_report, make_scorer
+from sklearn.metrics import f1_score, confusion_matrix, classification_report, make_scorer
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from pathlib import Path
 
 # this is the path to your pickle file (should be the same location as CSVs)
-path = Path('../../CSV')
+path = Path('../data')
 
 with open(f'{path}/low_g.pkl', 'rb') as file:
     df = pickle.load(file)
@@ -39,19 +39,22 @@ pipe = Pipeline([
 ])
 
 # create fl_scorer to use in the grid search
-recall_scorer = make_scorer(recall_score)
+f1_scorer = make_scorer(f1_score)
 
 # Grid search with cross-validation
-recall_scorer = make_scorer(recall_score)
+f1_scorer = make_scorer(f1_score)
 strat_k_fold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
-grid_search = GridSearchCV(estimator=pipe, param_grid=params, cv=strat_k_fold, scoring=recall_scorer)
+grid_search = GridSearchCV(estimator=pipe, param_grid=params, cv=strat_k_fold, scoring=f1_scorer)
 grid_search.fit(X_train, y_train)
 
+# save the best parameters from the grid search and the model with those parameters
 best_params = grid_search.best_params_
 best_model = grid_search.best_estimator_  
 
+# predict on the test set with the best model
 y_pred = best_model.predict(X_test)
 
+# print the classification report comparing the predicted values to the true values
 print(classification_report(y_test, y_pred, digits=4))
 #               precision    recall  f1-score   support
 
@@ -66,14 +69,15 @@ print(confusion_matrix(y_test, y_pred))
 #  [    1   343]]
 print(best_params)
 # {'dt__class_weight': 'balanced', 'dt__criterion': 'entropy', 'dt__max_depth': None, 'dt__max_features': 'sqrt', 'dt__min_samples_split': 2, 'dt__random_state': 42, 'dt__splitter': 'random'}
-# Access and sort feature importances
+
+# access and sort feature importances
 importances = best_model.named_steps['dt'].feature_importances_
 sorted_indices = importances.argsort()[::-1]
 
-# Retrieve feature names
+# retrieve feature names
 feature_names = list(X_train.columns)
 
-# Print the most important variables
+# print the most important variables
 print("Most important variables:")
 for i in sorted_indices:
     print(f"{feature_names[i]}: {importances[i]}")

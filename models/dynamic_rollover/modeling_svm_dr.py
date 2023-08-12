@@ -11,16 +11,16 @@ from imblearn.over_sampling import SMOTE, RandomOverSampler
 from pathlib import Path
 
 # this is the path to your pickle file (should be the same location as CSVs)
-path = Path('../data')
+path = Path('../../data')
 
-with open(path / 'low_g_pandas_2.0.2.pkl', 'rb') as file:
+with open(path / 'data/dynamic_rollover_pandas_2.0.2.pkl', 'rb') as file:
     df = pickle.load(file)
 
 # drop index and create X and y
 df = df.reset_index(drop=True)
 # define independent variables and dependent variable
-X = df.drop('LOW-G', axis=1)
-y = df['LOW-G']
+X = df.drop('Dynamic Rollover', axis=1)
+y = df['Dynamic Rollover']
 
 # create training set and testing set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
@@ -113,7 +113,8 @@ strat_k_fold = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 grid_search = GridSearchCV(estimator=pipe, param_grid=params, cv=strat_k_fold, scoring=f1_scorer)
 # fit the grid search
 grid_search.fit(X_train, y_train)
-#     grid_search.fit(X_train, y_train)
+
+# below iterates through the various pipelines and parameter sets to find the optimal combination, commented out using only best configuration
 # best_score = -1
 # Iterate over pipelines and their corresponding parameter grids
 # for pipe_name, pipe in pipelines.items():
@@ -134,9 +135,20 @@ y_pred = best_model.predict(X_test)
 
 # print the classification report comparing the predicted values to the true values
 print(classification_report(y_test, y_pred, digits=4))
+#               precision    recall  f1-score   support
+
+#            0     0.9999    0.9992    0.9996     51270
+#            1     0.9236    0.9941    0.9576       511
+
+#     accuracy                         0.9991     51781
+#    macro avg     0.9618    0.9967    0.9786     51781
+# weighted avg     0.9992    0.9991    0.9991     51781
 
 # confusion matrix for specific results
 print(confusion_matrix(y_test, y_pred))
+# [[51228    42]
+#  [    3   508]]
 
 # best hyperparameters to use for later analysis
 print(best_params)
+# {'svm__C': 1000, 'svm__class_weight': 'balanced', 'svm__gamma': 1, 'svm__kernel': 'rbf', 'svm__random_state': 42}

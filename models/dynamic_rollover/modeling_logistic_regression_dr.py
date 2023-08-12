@@ -19,7 +19,7 @@ warnings.simplefilter("ignore", category=ConvergenceWarning)
 warnings.simplefilter("ignore", category=FutureWarning)
 
 # this is the path to your pickle file (should be the same location as CSVs)
-path = Path('../data')
+path = Path('../../data')
 
 with open(path / 'data/dynamic_rollover_pandas_2.0.2.pkl', 'rb') as file:
     df = pickle.load(file)

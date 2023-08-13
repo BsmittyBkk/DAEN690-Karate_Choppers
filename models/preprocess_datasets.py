@@ -96,8 +96,8 @@ df_lg = combine_csv_files(path, use_cols_lg, label_table)
 df_lg.drop(['Dynamic Rollover'], inplace=True, axis=1)
 # this will create a pickle file with the working dataframe in your directory with the original CSV files
 # you will not need to run this script again, as we will load in the dataframe from the pickle file
-with open(f'{path}/data/dynamic_rollover_pandas_2.0.2.pkl', 'wb') as f:
+with open('../data/dynamic_rollover_pandas_2.0.2.pkl', 'wb') as f:
     pickle.dump(df_dr, f)
 
-with open(f'{path}/low_g_pandas_2.0.2.pkl', 'wb') as f:
+with open('../data/low_g_pandas_2.0.2.pkl', 'wb') as f:
     pickle.dump(df_lg, f)

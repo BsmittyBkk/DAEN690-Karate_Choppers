@@ -1,37 +1,89 @@
 # DAEN690-Karate_Choppers
-DAEN Summer Capstone Project focusing on   IDENTIFICATION, CHARACTERIZATION, AND ANALYSIS OF ROTORCRAFT FLIGHT MANEUVERS USING SIMULATED FLIGHT DATA
+DAEN Summer Capstone Project focusing on identification, characterization, and analysis of rotorcraft flight maneuvers using simulated flight data.
 
-# Setting up dataframe for model development
-- Change the path in combine_dataset.py and modeling_template.py to match the path to the CSV files with the data we want to use. DO NOT INCLUDE CSV FILES THAT ARE NOT IN THE MODELING SCOPE.
-- Run the combine_dataset.py, this may take a few moments to complete.
-- You should now have a pickle file in the directory with your data named working_df.pkl. This will allow for everyone to be using the same data for modeling.
-- Uncomment the line of code below the desired dataset you want to model on (Dynamic Rollover or LOW-G) at the bottom of modeling_template.py and create your model in that document, but rename the document as modeling_{your_model_type_here}.py e.g. modeling_KNN.py.
+---
 
-# Objectives
-The goal of this project is to conduct reasearch, create a report, and create machine learning models to accurately and efficiently detect and classify a subset of maneuvers in rotocraft. The data used in this project is in-flight simulated data from a rotorcraft flight simulator using a AW-139 model. The selected subset of manuevers for this project are dynamic rollovers, retreating blade stalls, and low-g scenarios.
+### Overview
 
-# Data
-The data used in the project was limited to 2 file types, CSV's in the form of RoAR flight data, and PDF's of hand written flight logs by the the simulating pilot.
+This repository consists of the comprehensive analysis and modeling for two target variables: Dynamic Rollover and Low Gravity. The goal of this project is to conduct research, create a report, and create machine learning models to accurately and efficiently detect and classify a subset of maneuvers in rotorcraft. The data used in this project is in-flight simulated data from a rotorcraft flight simulator using a AW-139 model. The selected subset of maneuvers for this project are dynamic rollovers and low-g scenarios.
 
-**CSV's**
-The CSV's provided had instrument data recorded during the time of flight simulation, along with the respective timestamps. In total there were 2 different formats of the CSV, one containing 108 variables, and the other containing 201 variables. There is a mixture of datatypes including numerical, strings, and boolean. 
+The main purpose of this README is to guide you through the structure and necessary steps to view the final results. If you wish to see the results immediately, you only need to ensure that all the requirements (found in `requirements.txt`) are installed, particularly pandas version 2.0.2, and then run the two final results Jupyter notebooks:
 
-**PDF's**
-The PDF's that were given were handwritten logs filled out by the pilot at the time of simulation. These logs had time stamps associated with the manuever/event that the pilot was conducting. The logs served as a resource for labeling events and manuevers of interest.
+Dynamic Rollover: [final_results_dr.ipynb](final_results_dr.ipynb)
 
-**STORAGE**
-The data was originally going to be stored here in the repository, however due to file size and the limitation of available storage space in a free GitHub environment, the data will not reside in the Repo. The client has provided the team virtual cloud storage via AWS, which is where future data analysis and machine learning will be done. The AWS available to the team **is not** a limiting factor.
+Low Gravity: [final_results_lg.ipynb](final_results_lg.ipynb)
 
-# Pre-Processing
-Pre-processing thus far has centered around data exploration. Some things that have been found were variables with zero variance, correlations amongst variables, as well as data distribution visaulized through histograms. The team is looking to efficiently label the data and ingest new simulated data as provided by the client. 
 
-# Algorithms
+### Repository Structure:
+```
+.
+├── data
+│   ├── dynamic_rollover_pandas_2.0.2.pkl
+│   └── low_g_pandas_2.0.2.pkl
+├── models
+│   ├── dynamic_rollover
+│   │   ├── modeling_decision_tree_dr.py
+│   │   ├── modeling_knn_dr.py
+│   │   ├── modeling_logistic_regression_dr.py
+│   │   ├── modeling_random_forest_dr.py
+│   │   ├── modeling_svm_dr.py
+│   ├── low_gravity
+│   │   ├── (similar structure as dynamic_rollover)
+│   ├── preprocess_datasets.py
+│   └── run_all_models.sh
+├── notebooks
+│   ├── dynamic_rollover
+│   │   ├── visualization_decision_tree_dr.ipynb
+│   │   ├── visualization_knn_dr.ipynb
+│   │   ├── visualization_logistic_regression_dr.ipynb
+│   │   ├── visualization_random_forest_dr.ipynb
+│   │   ├── visualization_svm_dr.ipynb
+│   │   └── pca_analysis_dr.ipynb
+│   ├── low_gravity
+│   │   ├── (similar structure as dynamic_rollover)
+│   └── exploratory_data_analysis.ipynb
+├── output
+│   ├── final_results_dr.html
+│   └── final_results_lg.html
+├── .gitignore
+├── final_results_dr.ipynb
+├── final_results_lg.ipynb
+├── requirements.txt
+└── README.md
+```
 
-# Findings
 
-# Conclusions
+### Quick Start:
 
-# Libraries Used
+1. **Prerequisites**: Ensure all requirements are installed using:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+    Ensure you have `pandas` version `2.0.2` installed. This is crucial since the data files are pickled with this version.
+
+2. **Final Results**: For immediate results:
+    - Open the two main Jupyter notebooks (`final_results_dr.ipynb` and `final_results_lg.ipynb`).
+    - Run them to view the final results for each target variable.
+
+3. **HTML Outputs** (Optional based on feedback): If you don't want to run the Jupyter notebooks, you can view the provided HTML outputs for a snapshot of the final results:
+    - `output/final_results_dr.html`
+    - `output/final_results_lg.html`
+
+### Detailed Breakdown:
+
+- **data**: Contains datasets in pickle format. These files are tailored for `pandas 2.0.2`. Any other version might produce unpredictable results or cause an `_unpickle` error.
+
+- **models**: This directory holds the raw python scripts used for model development, training, tuning, and analysis. We've tested multiple models such as decision trees, kNN, logistic regression, random forests, and SVM for binary classification. To run all models at once and retrieve the classification report and confusion matrix from each, you can use the shell script `run_all_models.sh`. Each model is set to the optimal hyperparameters, but the hyperparameter tuning code is commented out for reference.
+
+- **notebooks**: Contains Jupyter notebooks detailing the analysis and visualizations for each model. Also includes a notebook for PCA analysis and an EDA (Exploratory Data Analysis) notebook.
+
+### Notes:
+
+- Data Source: The standalone python file in the `models` directory processes original CSVs from a folder (`CSV`) expected to be in a sibling directory. CSVs dated from 6/15/23 are processed and labeled using information derived from manual flightlog PDF analysis.
+
+### Libraries used extensively in this project:
 
 **Pandas**
 
@@ -67,3 +119,10 @@ Scikit-learn was used for pre-processing and future ML work.
 May access the most recent version to download below.
 
 [Download available here](https://scikit-learn.org/stable/install.html)
+
+**Imbalanced-learn (imblearn)**
+
+imbalanced-learn, often referred to as `imblearn`, was employed to handle imbalanced datasets by providing numerous resampling techniques.
+You can access the most recent version to download below.
+
+[Download available here](https://imbalanced-learn.org/stable/install.html)

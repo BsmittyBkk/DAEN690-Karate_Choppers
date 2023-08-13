@@ -28,6 +28,9 @@ spyder_crash.log
 MANIFEST
 .boot_branch.txt
 venv
+.vscode
+*/.ipynb_checkpoints
+.ipynb_checkpoints
 
 # git .orig files
 *.orig
@@ -46,4 +49,3 @@ result.xml
 
 # Ignore setuptools development files in the PyLS subrepo
 external-deps/python-lsp-server/.installation-dir/
-jane_data_exploration.py
